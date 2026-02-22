@@ -1,0 +1,54 @@
+enum UserRole {
+  ADMIN
+  SELLER
+  CUSTOMER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(CUSTOMER)
+  foods     Food[]
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+model Food {
+  id          String      @id @default(uuid())
+  name        String
+  price       Float
+  image       String?
+  category    String
+  description String?
+  sellerId    String
+  seller      User        @relation(fields: [sellerId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  customerId  String
+  customer    User        @relation(fields: [customerId], references: [id])
+  totalAmount Float
+  status      OrderStatus @default(PENDING)
+  items       OrderItem[]
+  createdAt   DateTime    @default(now())
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id])
+  foodId   String
+  food     Food   @relation(fields: [foodId], references: [id])
+  quantity Int
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  DELIVERED
+  CANCELLED
+}
