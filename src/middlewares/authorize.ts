@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+import { Role } from "../generated/enums";
 import AppError from "../errors/AppError";
 
 const authorize =
-  (...roles: string[]) =>
+  (...roles: Role[]) =>
   (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.user) {
       throw new AppError(401, "You are not authenticated");

@@ -11,12 +11,10 @@ import {
 } from "./auth.interface";
 
 const generateTokens = (payload: TJwtPayload): TAuthTokens => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const accessToken = jwt.sign(payload, config.jwt_access_secret, {
     expiresIn: config.jwt_access_expires_in as any,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const refreshToken = jwt.sign(payload, config.jwt_refresh_secret, {
     expiresIn: config.jwt_refresh_expires_in as any,
   });
@@ -61,7 +59,10 @@ const login = async (payload: TLoginPayload) => {
   }
 
   if (user.status === "SUSPENDED") {
-    throw new AppError(403, "Your account has been suspended. Please contact support.");
+    throw new AppError(
+      403,
+      "Your account has been suspended. Please contact support.",
+    );
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -117,11 +118,17 @@ const getMe = async (userId: string) => {
 
 const refreshToken = async (token: string) => {
   try {
-    const decoded = jwt.verify(token, config.jwt_refresh_secret) as JwtPayload & TJwtPayload;
+    const decoded = jwt.verify(token, config.jwt_refresh_secret) as JwtPayload &
+      TJwtPayload;
 
-    const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+    });
     if (!user) {
-      throw new AppError(401, "User associated with this token no longer exists");
+      throw new AppError(
+        401,
+        "User associated with this token no longer exists",
+      );
     }
 
     if (user.status === "SUSPENDED") {
@@ -134,7 +141,6 @@ const refreshToken = async (token: string) => {
       role: user.role,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret, {
       expiresIn: config.jwt_access_expires_in as any,
     });
