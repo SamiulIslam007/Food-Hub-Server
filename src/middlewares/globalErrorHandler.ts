@@ -6,8 +6,7 @@ const globalErrorHandler: ErrorRequestHandler = (
   err: unknown,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _next: NextFunction
+  _next: NextFunction,
 ) => {
   let statusCode = 500;
   let message = "Internal Server Error";

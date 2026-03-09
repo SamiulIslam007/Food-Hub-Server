@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { AuthRoutes } from "../modules/Auth/auth.route";
 
 const router = Router();
@@ -10,11 +10,9 @@ const routerManager = [
   },
 ];
 
-// Register all module routes
 routerManager.forEach((r) => router.use(r.path, r.route));
 
-// Example base route (API health check)
-router.get("/", (req, res) => {
+router.get("/", (_req: Request, res: Response) => {
   res.json({ message: "FoodHub API is running." });
 });
 

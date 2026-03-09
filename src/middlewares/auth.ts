@@ -3,6 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import AppError from "../errors/AppError";
 import asyncHandler from "../utils/asyncHandler";
+import { Role } from "../generated/enums";
 
 const auth = asyncHandler(
   async (req: Request, _res: Response, next: NextFunction) => {
@@ -21,7 +22,7 @@ const auth = asyncHandler(
       ) as JwtPayload & {
         userId: string;
         email: string;
-        role: string;
+        role: Role;
       };
 
       req.user = {
