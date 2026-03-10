@@ -8,17 +8,14 @@ import { Role } from "../../generated/enums";
 
 const router = express.Router();
 
-// GET /api/v1/meals — public, supports filtering & pagination
 router.get(
   "/",
   validateRequest(mealValidationSchema.getMealsQuerySchema),
   MealController.getAllMeals
 );
 
-// GET /api/v1/meals/:id — public
 router.get("/:id", MealController.getMealById);
 
-// POST /api/v1/meals — PROVIDER only
 router.post(
   "/",
   auth,
@@ -27,7 +24,7 @@ router.post(
   MealController.createMeal
 );
 
-// PATCH /api/v1/meals/:id/toggle-availability — PROVIDER only (must be before /:id)
+// must be defined before PATCH /:id to avoid route conflict
 router.patch(
   "/:id/toggle-availability",
   auth,
@@ -35,7 +32,6 @@ router.patch(
   MealController.toggleAvailability
 );
 
-// PATCH /api/v1/meals/:id — PROVIDER (own meals) or ADMIN
 router.patch(
   "/:id",
   auth,
@@ -44,7 +40,6 @@ router.patch(
   MealController.updateMeal
 );
 
-// DELETE /api/v1/meals/:id — PROVIDER (own meals) or ADMIN
 router.delete(
   "/:id",
   auth,

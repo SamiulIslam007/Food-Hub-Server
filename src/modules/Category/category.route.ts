@@ -8,13 +8,10 @@ import { Role } from "../../generated/enums";
 
 const router = express.Router();
 
-// GET /api/v1/categories — public
 router.get("/", CategoryController.getAllCategories);
 
-// GET /api/v1/categories/:id — public
 router.get("/:id", CategoryController.getCategoryById);
 
-// POST /api/v1/categories — ADMIN only
 router.post(
   "/",
   auth,
@@ -23,7 +20,6 @@ router.post(
   CategoryController.createCategory
 );
 
-// PATCH /api/v1/categories/:id — ADMIN only
 router.patch(
   "/:id",
   auth,
@@ -32,7 +28,6 @@ router.patch(
   CategoryController.updateCategory
 );
 
-// DELETE /api/v1/categories/:id — ADMIN only
 router.delete(
   "/:id",
   auth,
